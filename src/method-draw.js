@@ -2515,21 +2515,20 @@
 	  
 	  
 	  
-      // var clickSave = function(){
-		// console.log("TESTING");
+		var clickSave = function(){
+		console.log("TESTING");
 		    
-        // flash($('#file_menu'));
-        //In the future, more options can be provided here
-        // var saveOpts = {
-          // 'images': curPrefs.img_save,
-          // 'round_digits': 6
-        // }
-        // svgCanvas.save(saveOpts);
-		// console.log(svgCanvas.getSvgString());
-      // };
+         flash($('#file_menu'));
+        // In the future, more options can be provided here
+         var saveOpts = {
+           'images': curPrefs.img_save,
+           'round_digits': 6
+         }
+         svgCanvas.save(saveOpts);
+       };
 	  
 	  
-	  var clickSave = function(){
+	  var clickSaveCouch = function(){
 		
 		console.log("Testing new function");
 		
@@ -2577,7 +2576,7 @@
 				
 				$.couch.db(input_db).saveDoc({"_id":input_id}, {
 					success: function(docSaved) {
-						
+						//Try to open the document in order to get the new revision
 						 $.couch.db(input_db).openDoc(input_id, {
 							 success: function(docUpdate){
 								 var doc = {
@@ -3304,7 +3303,8 @@
           {sel:'#tool_image', fn: clickImage, evt: 'mouseup'},
           {sel:'#tool_zoom', fn: clickZoom, evt: 'mouseup', key: ['Z', true]},
           {sel:'#tool_clear', fn: clickClear, evt: 'mouseup', key: [modKey + 'N', true]},
-          {sel:'#tool_save', fn: function() { editingsource ? saveSourceEditor(): clickSave() }, evt: 'mouseup', key: [modKey + 'S', true]},
+          {sel:'#tool_save', fn: function() { editingsource ? saveSourceEditor(): clickSaveCouch() }, evt: 'mouseup', key: [modKey + 'S', true]},
+		  {sel:'#tool_saveLocal', fn: function() { editingsource ? saveSourceEditor(): clickSave() }, evt: 'mouseup', key: [modKey + 'S', true]},
           {sel:'#tool_export', fn: clickExport, evt: 'mouseup'},
           {sel:'#tool_open', fn: clickOpen, evt: 'mouseup'},
           {sel:'#tool_import', fn: clickImport, evt: 'mouseup'},
