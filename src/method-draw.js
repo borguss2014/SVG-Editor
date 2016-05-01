@@ -2516,7 +2516,7 @@
 	  
 	  
 		var clickSave = function(){
-		console.log("TESTING");
+		 console.log("TESTING");
 		    
          flash($('#file_menu'));
         // In the future, more options can be provided here
@@ -2534,10 +2534,10 @@
 		
 		  
 		var input_db = "testing";
-		var input_id = "testingID";
+		var input_id = $.couch.newUUID();
 		  
-		  var str = svgCanvas.getSvgString();
-			 var encodedString = btoa(str);
+		var str = svgCanvas.getSvgString();
+		var encodedString = btoa(str);
 			
 			
 		 $.couch.db(input_db).openDoc(input_id, {
@@ -3304,7 +3304,7 @@
           {sel:'#tool_zoom', fn: clickZoom, evt: 'mouseup', key: ['Z', true]},
           {sel:'#tool_clear', fn: clickClear, evt: 'mouseup', key: [modKey + 'N', true]},
           {sel:'#tool_save', fn: function() { editingsource ? saveSourceEditor(): clickSaveCouch() }, evt: 'mouseup', key: [modKey + 'S', true]},
-		  {sel:'#tool_saveLocal', fn: function() { editingsource ? saveSourceEditor(): clickSave() }, evt: 'mouseup', key: [modKey + 'S', true]},
+		  {sel:'#tool_saveLocal', fn: function() { editingsource ? saveSourceEditor(): clickSave() }, evt: 'mouseup', key: [modKey + 'Q', true]},
           {sel:'#tool_export', fn: clickExport, evt: 'mouseup'},
           {sel:'#tool_open', fn: clickOpen, evt: 'mouseup'},
           {sel:'#tool_import', fn: clickImport, evt: 'mouseup'},

@@ -78,6 +78,14 @@ html, body {
   display: inline-block;
 }
 
+.fileNameInput{
+	width: 9em;
+	position: absolute;
+	margin-top: 5px;
+	margin-bottom: 5px;
+
+}
+
  .menu_title {
   cursor: pointer;
   display: inline-block;
