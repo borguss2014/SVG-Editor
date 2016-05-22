@@ -58,6 +58,8 @@
   <script type="text/javascript" src="lib/requestanimationframe.js"></script>
   <script type="text/javascript" src="lib/taphold.js"></script>
   <script type="text/javascript" src="lib/filesaver.js"></script>
+
+  <script type="text/javascript" src="lib/beaconsList.js"></script>
   
   
 <!--{endif}-->
@@ -123,9 +125,21 @@
       <div class="menu_item action_selected disabled" id="tool_paste">Paste <span class="shortcut">⌘V</span></div>
       <div class="menu_item action_selected disabled" id="tool_clone">Duplicate <span class="shortcut">⌘D</span></div>
       <div class="menu_item action_selected disabled" id="tool_delete">Delete <span>⌫</span></div>
+      <div class="separator"></div>
+      
     </div>
   </div>
   
+  <div class="menu">
+    <div class="menu_title">Beacons</div>
+    <div class="menu_list" id="beacon_menu">
+      <div class="menu_item" id="add_beacon_data">Add beacon to map<span>⌫</span></div>
+      <div class="menu_item" id="delete_beacon_data">Delete beacon from map<span>⌫</span></div>
+    </div>
+  </div>
+
+
+
   <div class="menu">
     <div class="menu_title">Object</div>
     <div class="menu_list"  id="object_menu">
@@ -154,9 +168,27 @@
   </div>
   
 
-		<input type="text" name="file_name" class="fileNameInput" maxlength="16" placeholder="Set image name..." title="The filename to be used in the database">
+<div class="beaconsAdd pop">
+    <form id="form1">
+        <p><label for="bUuid">UUID</label><input type="text" size="30" name="body" id="bUuid" /></p>
+        <p><label for="bPos">Position</label><input type="text" size="30" name="body" id="bPos" /></p>
+        <p><input type="submit" value="Save" name="commit" id="message_submit"/> or <a class="close" href="/">Cancel</a></p>
+    </form>
+</div>
 
-  
+
+<div class="beaconsDelete pop2">
+    <form id="form2">
+        <select id="mySelect" size="8">
+          <option>Apple</option>
+          <option>Pear</option>
+          <option>Banana</option>
+          <option>Orange</option>
+        </select>
+        <p><input type="submit" value="Save" name="commit" id="message_submit2"/> or <a class="close2" href="/">Cancel</a></p>
+    </form>
+</div>
+
 </div>
 
 <div id="tools_top" class="tools_panel">

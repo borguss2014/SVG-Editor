@@ -4196,6 +4196,8 @@
   
   // Run init once DOM is loaded
   $(methodDraw.init);
-  
 
 })();
+
+
+
