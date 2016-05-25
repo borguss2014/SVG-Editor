@@ -19,6 +19,10 @@
 
 	
 (function() {
+
+  var input_db = "testing";
+  var input_id = $.couch.newUUID();
+
   document.addEventListener("touchstart", touchHandler, true);
   document.addEventListener("touchmove", touchHandler, true);
   document.addEventListener("touchend", touchHandler, true);
@@ -2531,10 +2535,6 @@
 	  var clickSaveCouch = function(){
 		
 		console.log("Testing new function");
-		
-		  
-		var input_db = "testing";
-		var input_id = $.couch.newUUID();
 		  
 		var str = svgCanvas.getSvgString();
 		var encodedString = btoa(str);
@@ -2561,7 +2561,7 @@
 			
 				$.couch.db(input_db).saveDoc(doc, {
 					success: function(data) {
-						console.log("Saved");
+						console.log("Document exists, saving...");
 					},
 					error: function(status) {
 						console.log(status);
@@ -2573,27 +2573,72 @@
 			
 			
 			error: function(status){
-				
+				//If no document found, create a new one with the given UUID
 				$.couch.db(input_db).saveDoc({"_id":input_id}, {
 					success: function(docSaved) {
-						//Try to open the document in order to get the new revision
+						//Try to open the document in order to get the revision number
 						 $.couch.db(input_db).openDoc(input_id, {
 							 success: function(docUpdate){
-								 var doc = {
-									_id: input_id,
-									_rev: docUpdate._rev,
-									_attachments: {
-										"test.svg":
-										{
-											"content_type": "image/svg+xml",
-											"data": encodedString
-										}
-									}
-								};
-								
+								//  var doc = {
+								// 	_id: input_id,
+								// 	_rev: docUpdate._rev,
+								// 	_attachments: {
+								// 		"test.svg":
+								// 		{
+								// 			"content_type": "image/svg+xml",
+								// 			"data": encodedString
+								// 		}
+								// 	}
+								// };
+
+                var doc;
+        
+                if(beacon_array.length == 0){
+                  console.log("Beacon array empty, submitting doc without beacons property");
+                  doc = {
+                  _id: input_id,
+                  _rev: docUpdate._rev,
+                  _attachments: {
+                    "test.svg":
+                    {
+                      "content_type": "image/svg+xml",
+                      "data": encodedString
+                    }
+                  } 
+                  };
+                }
+                else{
+                  console.log("Beacons added to array, submitting doc with beacons property");
+                  var json = {"beacons":[]};
+                  var count = 0;
+                  for(var uuid=0; uuid<beacon_array.length; uuid++){
+                    var conc = "beacon"+count;
+                    json.beacons.push(
+                      {
+                        "UUID":beacon_array[uuid]
+                      }
+                    );
+                    count++;
+                  }
+
+                  var beacons = json.beacons;
+                  doc = {
+                  _id: input_id,
+                  _rev: docUpdate._rev,
+                  beacons,
+                  _attachments: {
+                    "test.svg":
+                    {
+                      "content_type": "image/svg+xml",
+                      "data": encodedString
+                    }
+                  }
+                  };
+                }
+								//Save the document with the SVG attachment
 								$.couch.db(input_db).saveDoc(doc, {
 									success: function(data) {
-										console.log("Saved");
+										console.log("Saved new document");
 									},
 									error: function(status) {
 										console.log(status);
