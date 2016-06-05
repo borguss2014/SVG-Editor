@@ -28,6 +28,7 @@
   document.addEventListener("touchend", touchHandler, true);
   document.addEventListener("touchcancel", touchHandler, true);
   
+
   if(!window.methodDraw) window.methodDraw = function($) {
     var svgCanvas;
     var Editor = {};
@@ -2566,8 +2567,9 @@
 					},
 					error: function(status) {
 						console.log(status);
-					}
+					}  
 				});
+
 
 			},
 			
@@ -2610,15 +2612,11 @@
                 }
                 else{
                   console.log("Beacons added to array, submitting doc with beacons property");
-                  var json = {"beacons":[]};
+                  var json = {"beacons":{}};
                   var count = 0;
                   for(var uuid=0; uuid<beacon_array.length; uuid++){
                     var conc = "beacon"+count;
-                    json.beacons.push(
-                      {
-                        "UUID":beacon_array[uuid]
-                      }
-                    );
+                    json.beacons[conc] = {"UUID": beacon_array[uuid]}; 
                     count++;
                   }
 
