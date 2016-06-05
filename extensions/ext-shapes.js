@@ -31,7 +31,8 @@ methodDraw.addExtension("shapes", function() {
     music: 'Music',
     weather: 'Weather &amp; Time',
     ui: 'User Interface',
-    social: 'Social Web'
+    social: 'Social Web',
+    beacon: 'Beacons'
   };
   
   var library = {
@@ -168,6 +169,7 @@ methodDraw.addExtension("shapes", function() {
       
       // Do mouseup on parent element rather than each button
       $('#shape_buttons').mouseup(function(evt) {
+        
         var btn = $(evt.target).closest('div.tool_button');
         
         if(!btn.length) return;
@@ -181,8 +183,9 @@ methodDraw.addExtension("shapes", function() {
         canv.setMode(mode_id);
         
         cur_shape_id = btn[0].id.substr((mode_id+'_').length);
+
         current_d = cur_lib.data[cur_shape_id];
-        
+
         $('.tools_flyout').fadeOut();
 
       });
@@ -233,16 +236,32 @@ methodDraw.addExtension("shapes", function() {
       var x = start_x = opts.start_x;
       var y = start_y = opts.start_y;
       var cur_style = canv.getStyle();
-      cur_shape = canv.addSvgElementFromJson({
-        "element": "path",
-        "curStyles": true,
-        "attr": {
-          "d": current_d,
-          "id": canv.getNextId(),
-          "opacity": cur_style.opacity / 2,
-          "style": "pointer-events:none"
-        }
-      });
+
+      if(cur_shape_id == "beacon:"){
+        cur_shape = canv.addSvgElementFromJson({
+          "element": "path",
+          "curStyles": true,
+          "attr": {
+            "d": current_d,
+            "id": getNextBeaconID(),
+            "opacity": cur_style.opacity / 2,
+            "style": "pointer-events:none"
+          }
+        });
+      }
+      else{
+        cur_shape = canv.addSvgElementFromJson({
+          "element": "path",
+          "curStyles": true,
+          "attr": {
+            "d": current_d,
+            "id": canv.getNextId(),
+            "opacity": cur_style.opacity / 2,
+            "style": "pointer-events:none"
+          }
+        });
+      }
+      
       cur_shape.setAttribute("d", current_d);
       // Make sure shape uses absolute values
       if(/[a-z]/.test(current_d)) {

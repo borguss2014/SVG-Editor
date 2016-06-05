@@ -241,6 +241,7 @@
           '#zoom_dropdown .svg_icon': 7
         },
         callback: function(icons) {
+
           $('.toolbar_button button > svg, .toolbar_button button > img').each(function() {
             $(this).parent().prepend(this);
           });
