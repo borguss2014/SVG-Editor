@@ -9,7 +9,7 @@
  */
 
 methodDraw.addExtension("shapes", function() {
-  
+
 
   var current_d, cur_shape_id;
   var canv = methodDraw.canvas;
@@ -17,7 +17,7 @@ methodDraw.addExtension("shapes", function() {
   var start_x, start_y;
   var svgroot = canv.getRootElem();
   var lastBBox = {};
-  
+
   // This populates the category list
   var categories = {
     basic: 'Basic',
@@ -34,7 +34,7 @@ methodDraw.addExtension("shapes", function() {
     social: 'Social Web',
     beacon: 'Beacons'
   };
-  
+
   var library = {
     'basic': {
       data: {
@@ -62,28 +62,28 @@ methodDraw.addExtension("shapes", function() {
         "divide": "m150,0.99785l0,0c25.17819,0 45.58916,20.41097 45.58916,45.58916c0,25.17821 -20.41096,45.58916 -45.58916,45.58916c-25.17822,0 -45.58916,-20.41093 -45.58916,-45.58916c0,-25.1782 20.41093,-45.58916 45.58916,-45.58916zm0,296.25203c-25.17822,0 -45.58916,-20.41095 -45.58916,-45.58917c0,-25.17819 20.41093,-45.58916 45.58916,-45.58916c25.17819,0 45.58916,20.41096 45.58916,45.58916c0,25.17822 -20.41096,45.58917 -45.58916,45.58917zm-134.06754,-193.71518l268.13507,0l0,91.17833l-268.13507,0z",
         "minus": "m0.99887,102.39503l297.49445,0l0,95.2112l-297.49445,0z",
         "times": "m1.00089,73.36786l72.36697,-72.36697l76.87431,76.87368l76.87431,-76.87368l72.36765,72.36697l-76.87433,76.87431l76.87433,76.87431l-72.36765,72.36765l-76.87431,-76.87433l-76.87431,76.87433l-72.36697,-72.36765l76.87368,-76.87431l-76.87368,-76.87431z"
-        
+
 
       },
       buttons: []
     }
   };
-  
+
   var cur_lib = library.basic;
-  
+
   var mode_id = 'shapelib';
-  
+
   function loadIcons() {
     $('#shape_buttons').empty();
-    
+
     // Show lib ones
     $('#shape_buttons').append(cur_lib.buttons);
   }
-  
+
   function loadLibrary(cat_id) {
-  
+
     var lib = library[cat_id];
-    
+
     if(!lib) {
       $('#shape_buttons').html('Loading...');
       $.getJSON('extensions/shapelib/' + cat_id + '.json', function(result, textStatus) {
@@ -97,19 +97,19 @@ methodDraw.addExtension("shapes", function() {
       });
       return;
     }
-    
+
     cur_lib = lib;
     if(!lib.buttons.length) makeButtons(cat_id, lib);
     loadIcons();
   }
-  
+
   function makeButtons(cat, shapes) {
     var size = cur_lib.size || 300;
     var fill = cur_lib.fill || false;
     var off = size * .05;
     var vb = [-off, -off, size + off*2, size + off*2].join(' ');
     var stroke = fill ? 0: (size/30);
-    
+
     var shape_icon = new DOMParser().parseFromString(
       '<svg xmlns="http://www.w3.org/2000/svg"><svg viewBox="' + vb + '"><path fill="#333" stroke="transparent" stroke-width="' + stroke + '" /><\/svg><\/svg>',
       'text/xml');
@@ -119,29 +119,29 @@ methodDraw.addExtension("shapes", function() {
     shape_icon.documentElement.setAttribute('width', width);
     shape_icon.documentElement.setAttribute('height', height);
     var svg_elem = $(document.importNode(shape_icon.documentElement,true));
-  
+
     var data = shapes.data;
-    
+
     cur_lib.buttons = [];
-  
+
     for(var id in data) {
       var path_d = data[id];
       var icon = svg_elem.clone();
       icon.find('path').attr('d', path_d);
-      
+
       var icon_btn = icon.wrap('<div class="tool_button">').parent().attr({
         id: mode_id + '_' + id,
         title: id
       });
-      
-      
+
+
       // Store for later use
       cur_lib.buttons.push(icon_btn[0]);
     }
-    
+
   }
 
-  
+
   return {
     svgicons: "extensions/ext-shapes.xml",
     buttons: [{
@@ -158,22 +158,23 @@ methodDraw.addExtension("shapes", function() {
     }],
     callback: function() {
 
-    
+
       var btn_div = $('<div id="shape_buttons">');
       $('#tools_shapelib > *').wrapAll(btn_div);
-      
+
       var shower = $('#tools_shapelib_show');
 
-      
+
       loadLibrary('basic');
-      
+
       // Do mouseup on parent element rather than each button
       $('#shape_buttons').mouseup(function(evt) {
-        
+
+
         var btn = $(evt.target).closest('div.tool_button');
-        
+
         if(!btn.length) return;
-        
+
         var copy = btn.children().clone().attr({width: 24, height: 24});
         shower.children(':not(.flyout_arrow_horiz)').remove();
         shower
@@ -181,8 +182,16 @@ methodDraw.addExtension("shapes", function() {
           .attr('data-curopt', '#' + btn[0].id) // This sets the current mode
           .mouseup();
         canv.setMode(mode_id);
-        
+
         cur_shape_id = btn[0].id.substr((mode_id+'_').length);
+
+        if (cur_shape_id == "beacon") {
+
+            if (!$(this).hasClass('selected')) {
+                $('.popTool').slideFadeToggle();
+            }
+
+        }
 
         current_d = cur_lib.data[cur_shape_id];
 
@@ -190,60 +199,91 @@ methodDraw.addExtension("shapes", function() {
 
       });
 
-//      
+
       var shape_cats = $('<div id="shape_cats">');
       var cat_str = '';
-      
+
       $.each(categories, function(id, label) {
         cat_str += '<div data-cat=' + id + '>' + label + '</div>';
       });
-      
+
       shape_cats.html(cat_str).children().bind('mouseup', function() {
         var catlink = $(this);
         catlink.siblings().removeClass('current');
         catlink.addClass('current');
-        
+
         loadLibrary(catlink.attr('data-cat'));
         // Get stuff
-        
+
         return false;
       });
-      
+
       shape_cats.children().eq(0).addClass('current');
-      
+
       $('#tools_shapelib').prepend(shape_cats);
 
       shower.mouseup(function() {
-        canv.setMode(current_d ? mode_id : 'select');
+
+      	if (cur_shape_id == 'beacon') {
+      	    if (!$(this).hasClass('selected')) {
+      	        $('.popTool').slideFadeToggle();
+      	    }
+
+            $('#formTool').on('submit', function(e) {
+              console.log("Trying to submit beacon UUID");
+
+              //Beacon array with UUID values
+              if ($('#bUuidTool').val()) {
+                console.log("UUID input field isnt empty , submitting ...");
+                
+                var uuidString = [$('#bUuidTool').val().slice(0,0), 'X', $('#bUuidTool').val().slice(0)].join('');
+          			beacon_array.push($('#bUuidTool').val());
+          			beacon_uuid = uuidString;
+
+                $("#notifications").text("UUID submitted");
+                $("#notifications").css("color", "#00FF00");
+                $('#notifications').fadeIn(200).delay(1000).fadeOut(200);
+
+              }
+
+              //Clear form input fields after submit and prevent default form submission
+              $('#bUuidTool').val('');
+              canv.setMode(current_d ? mode_id : 'select');
+              e.preventDefault();
+            });
+      	}
+      	else{
+        	canv.setMode(current_d ? mode_id : 'select');
+       }
       });
 
-      
+
       $('#tool_shapelib').remove();
-      
+
       var h = $('#tools_shapelib').height();
       $('#tools_shapelib').css({
         'margin-top': -(h/2),
         'margin-left': 3
       });
 
-  
+
     },
     mouseDown: function(opts) {
       var mode = canv.getMode();
       if(mode !== mode_id) return;
-      
+
       var e = opts.event;
       var x = start_x = opts.start_x;
       var y = start_y = opts.start_y;
       var cur_style = canv.getStyle();
 
-      if(cur_shape_id == "beacon:"){
+      if(cur_shape_id == "beacon" && getBeaconID() != ''){
         cur_shape = canv.addSvgElementFromJson({
           "element": "path",
           "curStyles": true,
           "attr": {
             "d": current_d,
-            "id": getNextBeaconID(),
+            "id": getBeaconID(),
             "opacity": cur_style.opacity / 2,
             "style": "pointer-events:none"
           }
@@ -261,7 +301,7 @@ methodDraw.addExtension("shapes", function() {
           }
         });
       }
-      
+
       cur_shape.setAttribute("d", current_d);
       // Make sure shape uses absolute values
       if(/[a-z]/.test(current_d)) {
@@ -269,8 +309,8 @@ methodDraw.addExtension("shapes", function() {
         cur_shape.setAttribute('d', current_d);
         canv.pathActions.fixEnd(cur_shape);
       }
-      
-      cur_shape.setAttribute('transform', "translate(" + x + "," + y + ") scale(0.005) translate(" + -x + "," + -y + ")");      
+
+      cur_shape.setAttribute('transform', "translate(" + x + "," + y + ") scale(0.005) translate(" + -x + "," + -y + ")");
 //      console.time('b');
       canv.recalculateDimensions(cur_shape);
       var tlist = canv.getTransformList(cur_shape);
@@ -287,15 +327,15 @@ methodDraw.addExtension("shapes", function() {
     mouseMove: function(opts) {
       var mode = canv.getMode();
       if(mode !== mode_id) return;
-      
+
       var zoom = canv.getZoom();
       var evt = opts.event
-      
+
       var x = opts.mouse_x/zoom;
       var y = opts.mouse_y/zoom;
-      
+
       var tlist = canv.getTransformList(cur_shape),
-        box = cur_shape.getBBox(), 
+        box = cur_shape.getBBox(),
         left = box.x, top = box.y, width = box.width,
         height = box.height;
       var dx = (x-start_x), dy = (y-start_y);
@@ -309,27 +349,27 @@ methodDraw.addExtension("shapes", function() {
 
       var ts = null,
         tx = 0, ty = 0,
-        sy = height ? (height+dy)/height : 1, 
+        sy = height ? (height+dy)/height : 1,
         sx = width ? (width+dx)/width : 1;
 
       var sx = newbox.width / lastBBox.width;
       var sy = newbox.height / lastBBox.height;
-      
+
       sx = sx || 1;
       sy = sy || 1;
-      
+
       // Not perfect, but mostly works...
-      
+
       if(x < start_x) {
         tx = lastBBox.width;
       }
       if(y < start_y) ty = lastBBox.height;
-      
+
       // update the transform list with translate,scale,translate
       var translateOrigin = svgroot.createSVGTransform(),
         scale = svgroot.createSVGTransform(),
         translateBack = svgroot.createSVGTransform();
-        
+
       translateOrigin.setTranslate(-(left+tx), -(top+ty));
       if(evt.shiftKey) {
         replaced = true
@@ -358,7 +398,7 @@ methodDraw.addExtension("shapes", function() {
     mouseUp: function(opts) {
       var mode = canv.getMode();
       if(mode !== mode_id) return;
-      
+
       if(opts.mouse_x == start_x && opts.mouse_y == start_y) {
         return {
           keep: false,
@@ -372,6 +412,6 @@ methodDraw.addExtension("shapes", function() {
         element: cur_shape,
         started: false
       }
-    }   
+    }
   }
 });
