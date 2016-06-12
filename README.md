@@ -22,4 +22,4 @@ Based on SVG Edit: http://code.google.com/p/svg-edit/
 
 SVG Edit is Copyright (c) Narendra Sisodiya narendra.sisodiya@gmail.com Pavol Rusnak rusnakp@gmail.com Jeff Schiller codedread@gmail.com Vidar Hokstad vidar.hokstad@gmail.com Alexis Deveria adeveria@gmail.com
 
-For more details check the LICENSE and AUTHORS files . A copy of these files should be provided with the application
+For more details check the LICENSE and AUTHORS files . A copy of these files should be provided with the application.
