@@ -11,3 +11,15 @@ The following files were modified to support these actions :
 - ext-shapes.js in /extensions + added beacon.json in /extensions/shapelib ->  new Beacons menu and beacon shape in the Shape Library
 
 SVG-Editor must be stored in CouchDB using Couchapp .
+
+--------------------------------------------
+
+SVG-Editor Copyright (c) 2016 Spoiala Viorel Cristian 
+
+Method Draw is Copyright (c) Mark MacKay mark@method.ac
+
+Based on SVG Edit: http://code.google.com/p/svg-edit/
+
+SVG Edit is Copyright (c) Narendra Sisodiya narendra.sisodiya@gmail.com Pavol Rusnak rusnakp@gmail.com Jeff Schiller codedread@gmail.com Vidar Hokstad vidar.hokstad@gmail.com Alexis Deveria adeveria@gmail.com
+
+For more details check the LICENSE and AUTHORS files . A copy of these files should be provided with the application
