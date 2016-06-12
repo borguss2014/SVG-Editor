@@ -10,7 +10,7 @@ The following files were modified to support these actions :
 - index.html + added beaconsList.js in /lib  -> functionality for adding / deleting beacon UUIDs from the beacon array used when saving the SVG in CouchDB (Beacons menu kept for debugging purposes)
 - ext-shapes.js in /extensions + added beacon.json in /extensions/shapelib ->  new Beacons menu and beacon shape in the Shape Library
 
-SVG-Editor must be stored in CouchDB .
+SVG-Editor must be stored in CouchDB . Subsequent SVG files resulted from SVG-Editor will be saved as attachments in CouchDB documents . 
 
 --------------------------------------------
 
