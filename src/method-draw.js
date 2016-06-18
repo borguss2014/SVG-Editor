@@ -2568,18 +2568,47 @@
 
 			 success: function(couchDoc) {
 
+				var doc;
 
-				var doc = {
-					_id: input_id,
-					_rev: couchDoc._rev,
-					_attachments: {
+				if(beacon_array.length == 0){
+                  console.log("Beacon array empty, submitting doc without beacons property");
+                  doc = {
+                  _id: input_id,
+                  _rev: couchDoc._rev,
+                  _attachments: 
+					  {
 						"test.svg":
 						{
-							"content_type": "image/svg+xml",
-							"data": encodedString
+						  "content_type": "image/svg+xml",
+						  "data": encodedString
 						}
-					}
-				};
+					  }
+                  };
+                }
+                else{
+                  console.log("Beacons added to array, submitting doc with beacons property");
+                  var json = {"beacons":{}};
+                  var count = 0;
+                  for(var uuid=0; uuid<beacon_array.length; uuid++){
+                    var conc = "beacon"+count;
+                    json.beacons[conc] = {"UUID": beacon_array[uuid]};
+                    count++;
+                  }
+
+                  var beacons = json.beacons;
+                  doc = {
+                  _id: input_id,
+                  _rev: couchDoc._rev,
+                  beacons,
+                  _attachments: {
+						"test.svg":
+						{
+						  "content_type": "image/svg+xml",
+						  "data": encodedString
+						}
+					  }
+                  };
+                }
 
 
 				$.couch.db(input_db).saveDoc(doc, {
