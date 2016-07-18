@@ -15,6 +15,7 @@ SVG-Editor must be stored in CouchDB . Subsequent SVG files resulted from SVG-Ed
 --------------------------------------------
 
 SVG-Editor Copyright (c) 2016 Spoiala Viorel Cristian 
+(Solely the code added/modified. Original code falls under the copyright of Method Draw and SVG Edit)
 
 Method Draw is Copyright (c) Mark MacKay mark@method.ac
 
